@@ -30,7 +30,7 @@ const Login = () => {
       }
       setLoading(false);
     } catch (err) {
-      setError(err.response?.data?.msg || 'Server error');
+      setError(err.response?.data?.errors[0].msg || 'Server error, Try again');
       setLoading(false);
     }
   };

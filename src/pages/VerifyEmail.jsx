@@ -30,7 +30,7 @@ const VerifyEmail = () => {
         navigate('/login');
       }, 3000); // Redirect to login after 3 seconds
     } catch (err) {
-      setError(err.response?.data?.msg || 'Server error');
+      setError(err.response?.data?.errors[0].msg || 'Server error, Try again');
     }
     setLoading(false);
   };
@@ -41,7 +41,7 @@ const VerifyEmail = () => {
       const res = await axios.post(`${baseUrl}/auth/resend-otp`, { email, type: 'email' });
       setSuccess(res.data.msg);
     } catch (err) {
-      setError(err.response?.data?.msg || 'Server error');
+      setError(err.response?.data?.errors[0].msg || 'Server error, Try again');
     }
     setLoading(false);
   };

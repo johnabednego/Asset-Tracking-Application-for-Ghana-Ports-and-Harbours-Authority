@@ -36,7 +36,7 @@ const Signup = () => {
       setLoading(false);
       navigate('/verify-email', { state: { email } });
     } catch (err) {
-      setError(err.response?.data?.msg || 'Server error');
+      setError(err.response?.data?.errors[0].msg || 'Server error, Try again');
       setLoading(false);
     }
   };

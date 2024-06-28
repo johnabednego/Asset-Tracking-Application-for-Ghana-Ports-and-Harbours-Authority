@@ -41,7 +41,7 @@ const VerifyResetOTP = () => {
         navigate('/login');
       }, 3000);
     } catch (err) {
-      setError(err.response?.data?.msg || 'Server error');
+      setError(err.response?.data?.errors[0].msg || 'Server error, Try again');
       setLoading(false);
     }
   };
