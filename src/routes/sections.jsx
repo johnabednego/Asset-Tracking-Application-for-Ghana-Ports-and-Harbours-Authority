@@ -6,10 +6,11 @@ import DashboardLayout from 'src/layouts/dashboard';
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const EmployeePage = lazy(() => import('src/pages/employee'));
 export const LoginPage = lazy(() => import('src/pages/login'));
+export const SignupPage = lazy(() => import('src/pages/signup'));
+export const RequestPasswordResetPage = lazy(() => import('src/pages/request-password-reset'));
+export const VerifyResetOTPPage = lazy(() => import('src/pages/verify-reset-otp'));
 export const AssetsPage = lazy(() => import('src/pages/assets'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
-export const Signup = lazy(() => import('src/pages/Signup'));
-import ProtectedRoute from './ProtectedRoute';
 
 // ----------------------------------------------------------------------
 
@@ -19,9 +20,7 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense>
-            <ProtectedRoute>
-              <Outlet />
-            </ProtectedRoute>
+            <Outlet />
           </Suspense>
         </DashboardLayout>
       ),
@@ -37,7 +36,15 @@ export default function Router() {
     },
     {
       path: 'signup',
-      element: <Signup />,
+      element: <SignupPage />,
+    },
+    {
+      path: 'request-password-reset',
+      element: <RequestPasswordResetPage />,
+    },
+    {
+      path: 'verify-reset-otp',
+      element: <VerifyResetOTPPage />,
     },
     {
       path: '404',

@@ -1,40 +1,45 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Container, Typography, Box, IconButton, InputAdornment, CircularProgress } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { TextField, Button, Container, Typography, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import baseUrl from 'src/components/baseUrl';
 
-const Signup = () => {
-  const [name, setName] = useState('');
+const VerifyResetOTP = () => {
+  const location = useLocation();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
+  useEffect(() => {
+    const emailFromState = location.state?.email;
+    if (emailFromState) {
+      setEmail(emailFromState);
+    }
+  }, [location.state]);
+
+  const handleVerifyReset = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (newPassword !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('Invalid email address');
-      return;
-    }
-
     setLoading(true);
     try {
-      const res = await axios.post(`${baseUrl}/auth/register`, { name, email, password });
-      alert(res.data.msg);
+      const res = await axios.post(`${baseUrl}/auth/verify-password-reset-otp`, { email, otp, newPassword });
+      setSuccess(res.data.msg);
+      setError('');
       setLoading(false);
-      navigate('/verify-email', { state: { email } });
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
     } catch (err) {
       setError(err.response?.data?.msg || 'Server error');
       setLoading(false);
@@ -51,21 +56,13 @@ const Signup = () => {
 
   return (
     <Container maxWidth="sm">
-      <div className='w-full flex flex-col items-center justify-center mt-[40px]'>
-        <img src="/favicon/favicon.ico" alt="Logo" className='' />
-        <h1 className='font-bold text-[20px]'>Ghana Ports And Harbours Authority Asset Tracking</h1>
+      <div className=' w-full flex flex-col items-center justify-center mt-[40px]'>
+        <img src="/favicon/favicon.ico" alt="" className='' />
+        <h1 className=' font-bold text-[20px]'>Ghana Ports And Harbours Authority Asset Tracking</h1>
       </div>
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography variant="h4" gutterBottom>Sign Up</Typography>
-        <form onSubmit={handleSignup} style={{ width: '100%' }}>
-          <TextField
-            label="Name"
-            fullWidth
-            margin="normal"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+        <Typography variant="h4" gutterBottom>Verify Reset OTP</Typography>
+        <form onSubmit={handleVerifyReset} style={{ width: '100%' }}>
           <TextField
             label="Email"
             fullWidth
@@ -73,15 +70,22 @@ const Signup = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            type="email"
           />
           <TextField
-            label="Password"
+            label="Verification Code"
+            fullWidth
+            margin="normal"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            required
+          />
+          <TextField
+            label="New Password"
             type={showPassword ? 'text' : 'password'}
             fullWidth
             margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
             required
             InputProps={{
               endAdornment: (
@@ -94,7 +98,7 @@ const Signup = () => {
             }}
           />
           <TextField
-            label="Confirm Password"
+            label="Confirm New Password"
             type={showConfirmPassword ? 'text' : 'password'}
             fullWidth
             margin="normal"
@@ -112,23 +116,17 @@ const Signup = () => {
             }}
           />
           {error && <Typography color="error">{error}</Typography>}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Sign Up'}
-          </Button>
-          <Button color="inherit" onClick={() => navigate('/login')} sx={{ mt: 2 }}>
-            Already have an account? Login
+          {success && <Typography color="success.main">{success}</Typography>}
+          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'Reset Password'}
           </Button>
         </form>
+        <Button color="inherit" onClick={() => navigate('/login')} sx={{ mt: 2 }}>
+          Back to Login
+        </Button>
       </Box>
     </Container>
   );
 };
 
-export default Signup;
+export default VerifyResetOTP;

@@ -1,34 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import baseUrl from 'src/components/baseUrl';
 
-const Login = () => {
+const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
-
-  const handleLogin = async (e) => {
+  const handleRequestReset = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${baseUrl}/auth/login`, { email, password });
-      if (res.data.verificationNeeded) {
-        navigate('/verify-email', { state: { email } });
-      } else {
-        localStorage.setItem('token', res.data.token);
-        navigate('/dashboard');
-      }
+      const res = await axios.post(`${baseUrl}/auth/request-password-reset`, { email });
+      setSuccess(res.data.msg);
+      setError('');
       setLoading(false);
+      setTimeout(() => {
+        navigate('/verify-reset-otp', { state: { email } });
+      }, 3000);
     } catch (err) {
       setError(err.response?.data?.msg || 'Server error');
       setLoading(false);
@@ -42,8 +35,8 @@ const Login = () => {
         <h1 className=' font-bold text-[20px]'>Ghana Ports And Harbours Authority Asset Tracking</h1>
       </div>
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography variant="h4" gutterBottom>Login</Typography>
-        <form onSubmit={handleLogin} style={{ width: '100%' }}>
+        <Typography variant="h4" gutterBottom>Request Password Reset</Typography>
+        <form onSubmit={handleRequestReset} style={{ width: '100%' }}>
           <TextField
             label="Email"
             fullWidth
@@ -52,16 +45,8 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
           {error && <Typography color="error">{error}</Typography>}
+          {success && <Typography color="success.main">{success}</Typography>}
           <Button
             type="submit"
             variant="contained"
@@ -70,18 +55,15 @@ const Login = () => {
             sx={{ mt: 2 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Login'}
-          </Button>
-          <Button color="inherit" onClick={() => navigate('/signup')} sx={{ mt: 2 }}>
-            Don't have an account? Sign Up
-          </Button>
-          <Button color="inherit" onClick={() => navigate('/request-password-reset')} sx={{ mt: 2 }}>
-            Forgot Password?
+            {loading ? <CircularProgress size={24} /> : 'Request Password Reset'}
           </Button>
         </form>
+        <Button color="inherit" onClick={() => navigate('/login')} sx={{ mt: 2 }}>
+          Back to Login
+        </Button>
       </Box>
     </Container>
   );
 };
 
-export default Login;
+export default RequestPasswordReset;
