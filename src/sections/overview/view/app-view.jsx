@@ -2,6 +2,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import AppWidgetSummary from '../app-widget-summary';
+import DashboardCharts from 'src/layouts/dashboard/common/dashboard-charts';
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +50,8 @@ export default function AppView() {
           />
         </Grid>
       </Grid>
+
+      <DashboardCharts/>
     </Container>
   );
 }

@@ -6,12 +6,26 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import EmployeeFilters from './employee-filters'; // Import the new EmployeeFilters component
 
 import Iconify from 'src/components/iconify';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({ numSelected, filterName, onFilterName }) {
+export default function EmployeeTableToolbar({ numSelected, filterName, onFilterName, onDeleteSelected, setFilters }) {
+  const [openFilter, setOpenFilter] = useState(false);
+  const handleOpenFilter = () => {
+    setOpenFilter(true);
+  };
+
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+  };
+
+  const handleFilter = (filterValues) => {
+    setFilters(filterValues);
+  };
   return (
     <Toolbar
       sx={{
@@ -33,7 +47,7 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Search employee..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify
@@ -47,23 +61,27 @@ export default function UserTableToolbar({ numSelected, filterName, onFilterName
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={onDeleteSelected}>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
+          <EmployeeFilters
+            openFilter={openFilter}
+            onOpenFilter={handleOpenFilter}
+            onCloseFilter={handleCloseFilter}
+            onFilter={handleFilter}
+          />
         </Tooltip>
       )}
     </Toolbar>
   );
 }
 
-UserTableToolbar.propTypes = {
+EmployeeTableToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  onDeleteSelected: PropTypes.func,
 };

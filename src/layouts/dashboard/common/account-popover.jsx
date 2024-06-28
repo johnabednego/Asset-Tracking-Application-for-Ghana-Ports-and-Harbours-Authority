@@ -11,26 +11,30 @@ import IconButton from '@mui/material/IconButton';
 
 import { account } from 'src/_mock/account';
 
+import { useAuth } from '../../../hooks/useAuth';
+
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
+  // {
+  //   label: 'Home',
+  //   icon: 'eva:home-fill',
+  // },
+  // {
+  //   label: 'Profile',
+  //   icon: 'eva:person-fill',
+  // },
+  // {
+  //   label: 'Settings',
+  //   icon: 'eva:settings-2-fill',
+  // },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const { logout } = useAuth();
+
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -39,6 +43,7 @@ export default function AccountPopover() {
 
   const handleClose = () => {
     setOpen(null);
+   logout()
   };
 
   return (

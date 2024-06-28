@@ -2,7 +2,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -16,15 +15,12 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
+export default function EmployeeTableRow({
   selected,
-  name,
-  avatarUrl,
-  company,
-  role,
-  isVerified,
-  status,
+  employee,
   handleClick,
+  handleOpenModal,
+  handleDelete,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -45,21 +41,22 @@ export default function UserTableRow({
 
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {employee.name}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell>{employee.company}</TableCell>
 
-        <TableCell>{role}</TableCell>
+        <TableCell>{employee.role}</TableCell>
 
-        <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
+        <TableCell align="center">{employee.isVerified ? 'Yes' : 'No'}</TableCell>
 
         <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
+          <Label color={(employee.status === 'banned' && 'error') || 'success'}>
+            {employee.status}
+          </Label>
         </TableCell>
 
         <TableCell align="right">
@@ -79,12 +76,12 @@ export default function UserTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={() => { handleCloseMenu(); handleOpenModal(employee); }}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={() => { handleCloseMenu(); handleDelete(employee.id); }} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
@@ -93,13 +90,10 @@ export default function UserTableRow({
   );
 }
 
-UserTableRow.propTypes = {
-  avatarUrl: PropTypes.any,
-  company: PropTypes.any,
+EmployeeTableRow.propTypes = {
+  selected: PropTypes.bool,
+  employee: PropTypes.object,
   handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
-  name: PropTypes.any,
-  role: PropTypes.any,
-  selected: PropTypes.any,
-  status: PropTypes.string,
+  handleOpenModal: PropTypes.func,
+  handleDelete: PropTypes.func,
 };

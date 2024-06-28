@@ -8,6 +8,8 @@ export const EmployeePage = lazy(() => import('src/pages/employee'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const AssetsPage = lazy(() => import('src/pages/assets'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
+export const Signup = lazy(() => import('src/pages/Signup'));
+import ProtectedRoute from './ProtectedRoute';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +19,9 @@ export default function Router() {
       element: (
         <DashboardLayout>
           <Suspense>
-            <Outlet />
+            <ProtectedRoute>
+              <Outlet />
+            </ProtectedRoute>
           </Suspense>
         </DashboardLayout>
       ),
@@ -30,6 +34,10 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'signup',
+      element: <Signup />,
     },
     {
       path: '404',

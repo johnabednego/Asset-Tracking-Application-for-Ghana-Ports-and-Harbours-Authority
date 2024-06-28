@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import axios from 'axios';
 
-const Login = () => {
+const Signup = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
-
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://asset-tracking-app.vercel.app/api/auth/login', { email, password });
-      localStorage.setItem('token', res.data.token);
-      navigate('/dashboard');
+      const res = await axios.post('https://asset-tracking-app.vercel.app/api/auth/register', { name, email, password });
+      alert(res.data.msg);
+      navigate('/login');
     } catch (err) {
       setError(err.response?.data?.msg || 'Server error');
     }
@@ -29,8 +24,15 @@ const Login = () => {
   return (
     <Container maxWidth="sm">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography variant="h4" gutterBottom>Login</Typography>
-        <form onSubmit={handleLogin} style={{ width: '100%' }}>
+        <Typography variant="h4" gutterBottom>Sign Up</Typography>
+        <form onSubmit={handleSignup} style={{ width: '100%' }}>
+          <TextField
+            label="Name"
+            fullWidth
+            margin="normal"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <TextField
             label="Email"
             fullWidth
@@ -48,10 +50,10 @@ const Login = () => {
           />
           {error && <Typography color="error">{error}</Typography>}
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-            Login
+            Sign Up
           </Button>
-          <Button color="inherit" onClick={() => navigate('/signup')} sx={{ mt: 2 }}>
-            Don't have an account? Sign Up
+          <Button color="inherit" onClick={() => navigate('/login')} sx={{ mt: 2 }}>
+            Already have an account? Login
           </Button>
         </form>
       </Box>
@@ -59,4 +61,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

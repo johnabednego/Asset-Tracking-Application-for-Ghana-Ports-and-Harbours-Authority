@@ -32,7 +32,7 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
       <div className=' mt-5 w-full flex items-center justify-center'>
-        <h2 className=" text-[12px] xf:text-[16px] sm:text-[20px] lg:text-[30px] font-bold mb-6 text-[#212b36]">Ghana Statistical Service Asset Tracking </h2>
+        <h2 className=" text-[12px] xf:text-[16px] sm:text-[20px] lg:text-[30px] font-bold mb-6 text-[#212b36]">Ghana Ports And Harbours Authority Asset Tracking </h2>
       </div>
       <Box sx={{ flexGrow: 1 }} />
 

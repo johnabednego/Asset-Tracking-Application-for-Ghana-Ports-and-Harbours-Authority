@@ -11,21 +11,29 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 const SORT_OPTIONS = [
-  { value: 'featured', label: 'Featured' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'priceDesc', label: 'Price: High-Low' },
-  { value: 'priceAsc', label: 'Price: Low-High' },
+  { value: 'new', label: 'New' },
+  { value: 'good', label: 'Good' },
+  { value: 'fair', label: 'Fair' },
+  { value: 'poor', label: 'Poor' },
+  { value: 'active', label: 'Active' },
+  { value: 'maintenance', label: 'Maintenance' },
+  { value: 'inactive', label: 'Inactive' },
 ];
 
-export default function ShopProductSort() {
+export default function AssetSort({ onSort }) {
   const [open, setOpen] = useState(null);
+  const [selectedOption, setSelectedOption] = useState('newest');
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (option) => {
     setOpen(null);
+    if (option) {
+      setSelectedOption(option.value);
+      onSort(option.value);
+    }
   };
 
   return (
@@ -38,14 +46,14 @@ export default function ShopProductSort() {
       >
         Sort By:&nbsp;
         <Typography component="span" variant="subtitle2" sx={{ color: 'text.secondary' }}>
-          Newest
+          {SORT_OPTIONS.find((option) => option.value === selectedOption)?.label}
         </Typography>
       </Button>
 
       <Menu
         open={!!open}
         anchorEl={open}
-        onClose={handleClose}
+        onClose={() => handleClose(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{
@@ -59,7 +67,11 @@ export default function ShopProductSort() {
         }}
       >
         {SORT_OPTIONS.map((option) => (
-          <MenuItem key={option.value} selected={option.value === 'newest'} onClick={handleClose}>
+          <MenuItem
+            key={option.value}
+            selected={option.value === selectedOption}
+            onClick={() => handleClose(option)}
+          >
             {option.label}
           </MenuItem>
         ))}

@@ -16,7 +16,6 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { account } from 'src/_mock/account';
 
-import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
 
 import { NAV } from './config-layout';
@@ -83,7 +82,7 @@ export default function Nav({ openNav, onCloseNav }) {
     >
       {/* <Logo sx={{ mt: 3, ml: 4 }} /> */}
       <div className=' w-full flex items-center ml-4 pt-5'>
-        <img src="public/favicon/favicon.ico" alt="" className=' w-[40px] h-[40px]' />
+        <img src="/favicon/favicon.ico" alt="" className='' />
       </div>
       {renderAccount}
 
