@@ -7,6 +7,7 @@ export const IndexPage = lazy(() => import('src/pages/app'));
 export const EmployeePage = lazy(() => import('src/pages/employee'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const SignupPage = lazy(() => import('src/pages/signup'));
+export const VerifyEmail = lazy(() => import('src/pages/VerifyEmail'));
 export const RequestPasswordResetPage = lazy(() => import('src/pages/request-password-reset'));
 export const VerifyResetOTPPage = lazy(() => import('src/pages/verify-reset-otp'));
 export const AssetsPage = lazy(() => import('src/pages/assets'));
@@ -37,6 +38,10 @@ export default function Router() {
     {
       path: 'signup',
       element: <SignupPage />,
+    },
+    {
+      path: 'verify-email',
+      element: <VerifyEmail />,
     },
     {
       path: 'request-password-reset',
