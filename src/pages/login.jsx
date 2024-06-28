@@ -28,6 +28,10 @@ const Login = () => {
 
   return (
     <Container maxWidth="sm">
+      <div className=' w-full flex flex-col items-center justify-center mt-[40px]'>
+        <img src="/favicon/favicon.ico" alt="" className='' />
+        <h1 className=' font-bold text-[20px]'>Ghana Ports And Harbours Authority Asset Tracking</h1>
+      </div>
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h4" gutterBottom>Login</Typography>
         <form onSubmit={handleLogin} style={{ width: '100%' }}>
