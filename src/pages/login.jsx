@@ -13,7 +13,7 @@ const Login = () => {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      navigate('/dashboard');
+      navigate('/');
     }
   }, [navigate]);
 
@@ -26,7 +26,7 @@ const Login = () => {
         navigate('/verify-email', { state: { email } });
       } else {
         localStorage.setItem('token', res.data.token);
-        navigate('/dashboard');
+        navigate('/');
       }
       setLoading(false);
     } catch (err) {
