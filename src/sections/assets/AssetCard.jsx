@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Modal from '../../pages/Modal';
 
-const AssetCard = ({ asset, onDelete, onEdit, currentUser }) => {
+const AssetCard = ({ asset, assets, onDelete, onEdit, currentUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedAsset, setEditedAsset] = useState({ ...asset });
@@ -12,8 +12,10 @@ const AssetCard = ({ asset, onDelete, onEdit, currentUser }) => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = () => {
-    onDelete(asset?._id);
+  const handleDelete = (id) => {
+    const updatedAssets = assets.filter((asset) => asset._id !== id);
+    setAssets(updatedAssets);
+    console.log(updatedAssets);
   };
 
   const handleSave = () => {

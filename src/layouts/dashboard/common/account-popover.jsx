@@ -45,6 +45,9 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  const data = localStorage.getItem('data')
+  const parsedData = JSON.parse(data)
+
   return (
     <>
       <IconButton
@@ -61,14 +64,14 @@ export default function AccountPopover() {
       >
         <Avatar
           src={account.photoURL}
-          alt={account.displayName}
+          alt={parsedData?.name}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {account.displayName.charAt(0).toUpperCase()}
+          {parsedData?.name?.toString().charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
@@ -89,7 +92,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {parsedData?.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {account.email}

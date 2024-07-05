@@ -1,13 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import AssetCard from './AssetCard';
 import Button from '@mui/material/Button';
+import baseUrl from 'src/components/baseUrl';
+import axios from 'axios';
 
+const AssetList = ({ sortOption, filters, setAssets, assets }) => {
+  const data = localStorage.getItem('data')
+  const parsedData = JSON.parse(data)
+  const token = parsedData?.token
+  console.log(token)
 
-const AssetList = ({ sortOption, filters }) => {
-  const [assets, setAssets] = useState([]);
+  const fetchAssets = async () => {
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${baseUrl}/assets`,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': `${token}`
+      },
+      data: {}
+    };
+
+    axios.request(config)
+      .then((response) => {
+        // console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  }
 
   useEffect(() => {
     // Dummy data for assets
+
+    fetchAssets()
+
     const dummyAssets = [
       {
         _id: '1',
@@ -65,9 +93,6 @@ const AssetList = ({ sortOption, filters }) => {
       return a.status === sortOption ? -1 : 1;
     });
 
-  const addAsset = (newAsset) => {
-    setAssets([...assets, { ...newAsset, _id: Date.now().toString() }]);
-  };
 
   return (
     <div className='p-6'>
@@ -78,6 +103,7 @@ const AssetList = ({ sortOption, filters }) => {
             <AssetCard
               key={asset._id}
               asset={asset}
+              assets={assets}
             />
           ))}
         </div>

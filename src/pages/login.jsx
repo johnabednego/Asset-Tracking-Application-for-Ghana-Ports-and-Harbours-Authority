@@ -26,11 +26,18 @@ const Login = () => {
         navigate('/verify-email', { state: { email } });
       } else {
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('data', JSON.stringify(res.data));
         navigate('/');
+        window.location.reload()
       }
       setLoading(false);
     } catch (err) {
+      if(err.response?.data?.msg){
+        setError(err.response?.data?.msg || 'Server error, Try again');
+      }
+      if(err.response?.data?.errors){
       setError(err.response?.data?.errors[0].msg || 'Server error, Try again');
+      }
       setLoading(false);
     }
   };
@@ -43,6 +50,7 @@ const Login = () => {
       </div>
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h4" gutterBottom>Login</Typography>
+        {error && <Typography color="error">{error}</Typography>}
         <form onSubmit={handleLogin} style={{ width: '100%' }}>
           <TextField
             label="Email"
@@ -61,7 +69,9 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          {error && <Typography color="error">{error}</Typography>}
+          <Button color="inherit" onClick={() => navigate('/request-password-reset')} sx={{ mt: 2 }}>
+            Forgot Password?
+          </Button>
           <Button
             type="submit"
             variant="contained"
@@ -74,9 +84,6 @@ const Login = () => {
           </Button>
           <Button color="inherit" onClick={() => navigate('/signup')} sx={{ mt: 2 }}>
             Don't have an account? Sign Up
-          </Button>
-          <Button color="inherit" onClick={() => navigate('/request-password-reset')} sx={{ mt: 2 }}>
-            Forgot Password?
           </Button>
         </form>
       </Box>

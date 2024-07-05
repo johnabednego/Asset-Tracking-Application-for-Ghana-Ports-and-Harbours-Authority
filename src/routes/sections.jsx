@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Outlet, Navigate, useRoutes } from 'react-router-dom';
+import { Outlet, Navigate, useRoutes, json } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
 
@@ -16,6 +16,8 @@ export const Page404 = lazy(() => import('src/pages/page-not-found'));
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const data = localStorage.getItem('data')
+  const parsedData = JSON.parse(data)
   const routes = useRoutes([
     {
       element: (
@@ -28,7 +30,7 @@ export default function Router() {
       children: [
         { element: <IndexPage />, index: true },
         { path: 'employees', element: <EmployeePage /> },
-        { path: 'assets', element: <AssetsPage /> },
+        { path: 'assets', element: parsedData?.data?.role === 'admin' ? <AssetsPage /> : <Page404/> },
       ],
     },
     {

@@ -13,6 +13,7 @@ import Select from '@mui/material/Select';
 import AssetSort from '../asset-sort';
 import AssetFilters from '../asset-filters';
 import AssetList from '../AssetList';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ const STATUS_OPTIONS = ['active', 'maintenance', 'inactive'];
 const CONDITION_OPTIONS = ['new', 'good', 'fair', 'poor'];
 
 export default function AssetsView() {
+  const [assets, setAssets] = useState([]);
   const [openFilter, setOpenFilter] = useState(false);
   const [sortOption, setSortOption] = useState('new');
   const [filters, setFilters] = useState({
@@ -63,10 +65,32 @@ export default function AssetsView() {
     setOpenAddModal(false);
   };
 
-  const handleAddAsset = () => {
-    // Function to handle adding a new asset
+  const handleAddAsset = async () => {
+    setAssets([...assets, { ...newAsset, _id: Date.now().toString() }]);
     setOpenAddModal(false);
+    // Function to handle adding a new asset
+    // let config = {
+    //   method: 'post',
+    //   maxBodyLength: Infinity,
+    //   url: `${baseUrl}/assets`,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'x-auth-token': `${token}`
+    //   },
+    //   data: {}
+    // };
+
+    // await axios.request(config)
+    //   .then((response) => {
+    //     console.log(response)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //   });
+
+   
   };
+
 
   return (
     <Container>
@@ -92,7 +116,7 @@ export default function AssetsView() {
         </Button>
       </Stack>
 
-      <AssetList sortOption={sortOption} filters={filters} />
+      <AssetList sortOption={sortOption} filters={filters} setAssets={setAssets} assets={assets} />
 
       <Modal
         open={openAddModal}

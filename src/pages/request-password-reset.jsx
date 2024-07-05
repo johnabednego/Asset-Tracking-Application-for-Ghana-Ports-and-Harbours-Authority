@@ -23,7 +23,7 @@ const RequestPasswordReset = () => {
         navigate('/verify-reset-otp', { state: { email } });
       }, 3000);
     } catch (err) {
-      setError(err.response?.data?.errors[0].msg || 'Server error, Try again');
+      setError(err.response?.data?.msg || 'Server error, Try again');
       setLoading(false);
     }
   };
@@ -36,6 +36,7 @@ const RequestPasswordReset = () => {
       </div>
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h4" gutterBottom>Request Password Reset</Typography>
+        {error && <Typography color="error">{error}</Typography>}
         <form onSubmit={handleRequestReset} style={{ width: '100%' }}>
           <TextField
             label="Email"
@@ -45,7 +46,6 @@ const RequestPasswordReset = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          {error && <Typography color="error">{error}</Typography>}
           {success && <Typography color="success.main">{success}</Typography>}
           <Button
             type="submit"
